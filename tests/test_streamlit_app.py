@@ -33,7 +33,7 @@ class StreamlitTests(unittest.TestCase):
             self.assertIn("by Bandwagon Breaks", [caption.value for caption in app.caption])
             self.assertEqual([m.value for m in app.metric], ["2", "1", "1", "2"])
             ranking = app.dataframe[0].value
-            self.assertEqual(ranking["Entering qualifying season"].tolist(), ["3rd (provisional)", "4th"])
+            self.assertEqual(ranking["Entering qualifying season"].tolist(), ["3rd", "4th"])
             app.number_input(key="leap_min_ppg").set_value(13.0).run()
             self.assertFalse(app.exception)
             self.assertEqual([m.value for m in app.metric], ["2", "0", "1", "1"])

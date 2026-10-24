@@ -104,8 +104,7 @@ def main():
     output = args.output_dir / stem
     summary.to_csv(output.with_suffix(".csv"), index=False)
     data.to_csv(args.output_dir / f"{stem}_player_ratios.csv", index=False)
-    policy = "provisional players excluded" if args.exclude_provisional else "includes provisional players"
-    plot_growth(summary, output, subtitle=f"{data.player_id.nunique():,} eligible players · regular season · {policy}")
+    plot_growth(summary, output, subtitle=f"{data.player_id.nunique():,} eligible players · regular season")
     print(summary.to_string(index=False, float_format=lambda value: f"{value:.3f}"))
     print(f"Zero-baseline players excluded: {excluded}")
     print(f"Saved PNG, SVG and chart data: {output}")

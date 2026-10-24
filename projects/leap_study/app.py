@@ -90,7 +90,7 @@ def render():
             st.write(f"Highest observed mean: qualifying season **{int(peak.qualifying_season)}**, "
                      f"**+{peak.mean_percent_increase:.1f}%** over baseline. "
                      "The dashed line marks year four for comparison.")
-            fig = create_growth_figure(summary, subtitle=f"{eligible.player_id.nunique():,} eligible players · minimum {min_games} games · includes provisional players")
+            fig = create_growth_figure(summary, subtitle=f"{eligible.player_id.nunique():,} eligible players · minimum {min_games} games")
             try:
                 st.pyplot(fig)
                 image = BytesIO()
@@ -108,8 +108,14 @@ def render():
         st.info("No entering-third or entering-fourth candidates meet these criteria.")
     else:
         display = candidates[["rank", "player_name", "points_per_game", "games_played", "season", "entering_qualifying_season"]].copy()
-        display["entering_qualifying_season"] = display.entering_qualifying_season.map({3: "3rd (provisional)", 4: "4th"})
+        display["entering_qualifying_season"] = display.entering_qualifying_season.map({3: "3rd", 4: "4th"})
         display.columns = ["Rank", "Player", "Latest PPG", "Games", "Latest season", "Entering qualifying season"]
-        st.dataframe(display, hide_index=True,
+        styled = display.style.map(
+            lambda value: ("background-color: #dbeafe; color: #1e40af; font-weight: 600;"
+                           if value == "3rd" else
+                           "background-color: #ffedd5; color: #9a3412; font-weight: 600;"),
+            subset=["Entering qualifying season"],
+        )
+        st.dataframe(styled, hide_index=True,
                      column_config={"Latest PPG": st.column_config.NumberColumn(format="%.2f")})
         st.download_button("Download ranked candidates", candidates.to_csv(index=False), "leap_candidates.csv", "text/csv")
