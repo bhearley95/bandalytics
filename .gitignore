@@ -1,0 +1,41 @@
+# Environments and local credentials
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+.streamlit/secrets.toml
+*.secrets.env
+*.pem
+*.key
+
+# Python build and test artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Generated research data and plots; preserve the folder structure
+projects/*/data/raw/*
+!projects/*/data/raw/.gitkeep
+projects/*/data/processed/*
+!projects/*/data/processed/.gitkeep
+projects/*/figures/*
+!projects/*/figures/.gitkeep
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+
+# Local editor, OS and server files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

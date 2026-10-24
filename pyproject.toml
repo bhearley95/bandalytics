@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cards-tracker"
+version = "0.1.0"
+description = "Tools for sports card sales tracking and NBA player statistics"
+requires-python = ">=3.11"
+dependencies = ["nba_api>=1.12,<2", "pandas>=2.3.3,<4", "numpy>=2.3.3,<3"]
+
+[project.optional-dependencies]
+plots = ["matplotlib>=3.9,<4"]
+cloud = ["sqlitecloud>=0.0.84,<0.1"]
+app = ["streamlit>=1.45,<2", "matplotlib>=3.9,<4", "sqlitecloud>=0.0.84,<0.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
