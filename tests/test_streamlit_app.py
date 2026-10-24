@@ -27,7 +27,7 @@ class StreamlitTests(unittest.TestCase):
                 patch("projects.leap_study.app.read_cloud_study", return_value=fixture()):
             app = AppTest.from_file(str(APP), default_timeout=30).run()
             self.assertFalse(app.exception)
-            self.assertEqual(app.selectbox(key="project").value, "Leap Study")
+            self.assertEqual(app.selectbox(key="project").value, "The Leap")
             self.assertEqual(len(app.selectbox), 1)
             self.assertIn("Bandalytics", [title.value for title in app.title])
             self.assertIn("by Bandwagon Breaks", [caption.value for caption in app.caption])

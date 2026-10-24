@@ -181,6 +181,19 @@ historical `third_year_ppg_rankings.csv` using the same current criteria.
 The standard analysis in `data/processed/analysis/` and plots in `figures/`
 use the 25-game minimum.
 
+### Historical entering-fourth leaders
+
+```powershell
+.\.env\Scripts\python.exe .\projects\leap_study\analysis\rank_historical_candidates.py
+```
+
+Starting four years after the database's start year, this reapplies eligibility
+at each prior-season cutoff and ranks entering-fourth candidates by third
+qualifying-season PPG. Future seasons do not affect earlier rankings. It saves
+`data/processed/analysis/historical_fourth_year_candidates.csv`, retaining ties.
+These are retrospective selections from the collected cohorts, not claims
+that the selected players actually peaked the following year.
+
 ## Sync NBA data to SQLite Cloud
 
 Install the optional SQLite Cloud driver:

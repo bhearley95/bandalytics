@@ -1,4 +1,4 @@
-"""Interactive Leap Study page, using the same rules as the analysis scripts."""
+"""Interactive The Leap page, using the same rules as the analysis scripts."""
 
 from io import BytesIO
 import os
@@ -31,7 +31,7 @@ def load_cloud(url):
 
 
 def render():
-    st.title("Leap Study")
+    st.title("The Leap")
     st.write("Explore how scoring develops, then find players approaching their third or fourth qualifying season.")
 
     with st.sidebar:
