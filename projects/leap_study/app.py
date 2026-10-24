@@ -2,18 +2,14 @@
 
 from io import BytesIO
 import os
-from pathlib import Path
 
 import matplotlib.pyplot as plt
 import streamlit as st
 from streamlit.errors import StreamlitSecretNotFoundError
 
-from cards_tracker.app_data import read_cloud_study, read_local_study
+from cards_tracker.app_data import read_cloud_study
 from projects.leap_study.analysis.analyze_players import analyze_players, rank_candidates
 from projects.leap_study.analysis.plot_ppg_growth import create_growth_figure, summarize_growth
-
-PROJECT_DIR = Path(__file__).resolve().parent
-
 
 def connection_string():
     value = os.environ.get("SQLITE_CLOUD_CONNECTION_STRING")
@@ -34,11 +30,6 @@ def load_cloud(url):
         raise ValueError("Cloud data could not be loaded. Check the configured connection and database access.") from None
 
 
-@st.cache_data(ttl=300, max_entries=4, show_spinner=False)
-def load_local(path, modified_at):
-    return read_local_study(path)
-
-
 def render():
     st.title("Leap Study")
     st.write("Explore how scoring develops, then find players approaching their third or fourth qualifying season.")
@@ -55,29 +46,23 @@ def render():
                                     value=25, step=1, key="leap_min_games",
                                     help="Seasons with fewer games are skipped before numbering a player's seasons.")
         st.subheader("Data")
-        source = st.selectbox("Data source", ["SQLite Cloud", "Local database"], key="leap_source")
         if st.button("Refresh data", key="leap_refresh"):
             load_cloud.clear()
-            load_local.clear()
     try:
         with st.spinner("Loading player histories…"):
-            if source == "SQLite Cloud":
-                url = connection_string()
-                if not url:
-                    st.info("Set SQLITE_CLOUD_CONNECTION_STRING in your environment or Streamlit secrets to load cloud data. You can also select Local database in the sidebar.")
-                    return
-                data, metadata, snapshot = load_cloud(url)
-            else:
-                path = PROJECT_DIR / "data/processed/leap_study.sqlite"
-                data, metadata, snapshot = load_local(str(path), path.stat().st_mtime_ns)
+            url = connection_string()
+            if not url:
+                st.info("Set SQLITE_CLOUD_CONNECTION_STRING in your environment or Streamlit secrets to load the study data.")
+                return
+            data, metadata, snapshot = load_cloud(url)
     except Exception:
-        st.error("Unable to load the selected data source. Check the database configuration and use Refresh data to retry.")
+        st.error("Unable to load SQLite Cloud data. Check the database configuration and use Refresh data to retry.")
         return
     if data.empty:
-        st.info("The selected database has no player histories yet.")
+        st.info("The database has no player histories yet.")
         return
 
-    st.caption(f"{source} · {metadata['start_season']} through {metadata['through_season']} · regular season · data built {metadata.get('built_at', 'unknown')}")
+    st.caption(f"SQLite Cloud · {metadata['start_season']} through {metadata['through_season']} · regular season · data built {metadata.get('built_at', 'unknown')}")
     with st.spinner("Applying player criteria…"):
         decisions, audit = analyze_players(data, min_games=int(min_games),
                                            min_second_season_ppg=float(min_ppg),

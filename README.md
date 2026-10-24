@@ -1,4 +1,6 @@
-# Cards tracker
+# Bandalytics
+
+by Bandwagon Breaks
 
 Python tools for sports card sales tracking and NBA statistics. The first component
 is `NBAClient`, wrapping [`nba_api`](https://github.com/swar/nba_api).
@@ -65,13 +67,10 @@ games minimum (25). The plot, player counts and ranked candidates
 update together. Rankings label players entering their third or fourth
 qualifying season and can be downloaded with the current criteria.
 
-Cloud data is the default. Set `SQLITE_CLOUD_CONNECTION_STRING` in the process
+The app always reads data from SQLite Cloud. Set `SQLITE_CLOUD_CONNECTION_STRING` in the process
 environment or copy `.streamlit/secrets.toml.example` to the ignored
 `.streamlit/secrets.toml` and enter your database-specific connection URL there.
 The app only reads the database; use a read-only credential for deployment.
-For development without credentials, select **Local database** in the sidebar.
-On a fresh clone, first create it with
-`.\.env\Scripts\python.exe projects/leap_study/analysis/build_database.py`.
 Cloud failures are shown as errors rather than silently switching datasets.
 
 Data is cached for five minutes; **Refresh data** reloads it immediately. New
